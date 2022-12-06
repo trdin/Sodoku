@@ -24,72 +24,149 @@ background
   orig: 600, 400
   offset: 0, 0
   index: -1
-number0
+border
   rotate: false
   xy: 2, 2
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number1
+number0
   rotate: false
   xy: 604, 404
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number2
+number1
   rotate: false
   xy: 84, 2
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number3
+number1border
+  rotate: false
+  xy: 686, 240
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number2
   rotate: false
   xy: 604, 322
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number4
+number2border
+  rotate: false
+  xy: 768, 322
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number3
   rotate: false
   xy: 686, 404
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number5
+number3border
+  rotate: false
+  xy: 850, 404
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number4
   rotate: false
   xy: 166, 2
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number6
+number4border
+  rotate: false
+  xy: 330, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number5
   rotate: false
   xy: 604, 240
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number7
+number5border
+  rotate: false
+  xy: 686, 158
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number6
   rotate: false
   xy: 686, 322
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number8
+number6border
+  rotate: false
+  xy: 768, 240
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number7
   rotate: false
   xy: 768, 404
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
-number9
+number7border
+  rotate: false
+  xy: 850, 322
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number8
   rotate: false
   xy: 248, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number8border
+  rotate: false
+  xy: 932, 404
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number9
+  rotate: false
+  xy: 604, 158
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number9border
+  rotate: false
+  xy: 412, 2
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+selected
+  rotate: false
+  xy: 768, 158
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
