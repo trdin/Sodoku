@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,17 +17,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
 import com.mygdx.game.config.GameConfig;
+import com.mygdx.game.objects.Board;
 import com.mygdx.game.objects.Cell;
+import com.mygdx.game.objects.Data;
+import com.mygdx.game.objects.leaderBoard;
+
+import java.util.Objects;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -38,38 +48,79 @@ public class GameScreen extends ScreenAdapter {
     private Viewport hudViewport;
 
     private Stage gameplayStage;
+    private Stage finishStage;
     private Stage hudStage;
 
     private Skin skin;
     private TextureAtlas gameplayAtlas;
+    private BitmapFont font;
 
     private Cell selectedCell;
+
+    private Board board;
+
+    private int size = 9;
+
+    private int score = 0;
+    private long lastScoreTime = 0;
+
+    final long SCORE_DEDUCT_TIME= 1000;
+
+    private Label scoreLabel;
+    private Label endScore;
 
 
     //private CellState move = GameManager.INSTANCE.getInitMove();
     private Image infoImage;
 
     public GameScreen(Sudoku game) {
+        score = 100;
+
+        lastScoreTime = TimeUtils.millis();
+        int[][] data = new int[9][9];
+
+        for (int i = 0; i < Data.solved.length; i++) {
+            data[i] = Data.solved[i].clone();
+        }
+
         this.game = game;
         assetManager = game.getAssetManager();
+        board = new Board(data, new Cell[size][size]);
+        //log.debug("create");
+
+        //board.board = Data.solved.clone();
     }
 
     @Override
     public void show() {
+
+        //board = new Board(Data.solved.clone(), new Cell[size][size]);
+
+
+
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
 
         gameplayStage = new Stage(viewport, game.getBatch());
         hudStage = new Stage(hudViewport, game.getBatch());
+        finishStage = new Stage(hudViewport, game.getBatch());
 
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
+        font = assetManager.get(AssetDescriptors.UI_FONT);
+
+        scoreLabel = new Label("Score: " + score , skin);
+        scoreLabel.setAlignment(Align.center);
+       // scoreLabel.setPosition(GameConfig.HUD_WIDTH / 2f +50f, 20f);
 
         gameplayStage.addActor(createGrid(9, 5));
-       //hudStage.addActor(createInfo());
+        hudStage.addActor(createScore());
+        //hudStage.addActor(scoreLabel);
         hudStage.addActor(createBackButton());
 
-        Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage));
+        finishStage.addActor(setFinishScreen());
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage, finishStage));
     }
 
     @Override
@@ -83,11 +134,11 @@ public class GameScreen extends ScreenAdapter {
         ScreenUtils.clear(195 / 255f, 195 / 255f, 195 / 255f, 0f);
 
         if (selectedCell != null) {
-            log.debug(selectedCell.row + " " + selectedCell.column);
+            //log.debug(selectedCell.row + " " + selectedCell.column);
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
                 setNumber(1);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2) ) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
                 setNumber(2);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
@@ -96,19 +147,19 @@ public class GameScreen extends ScreenAdapter {
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_4) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
                 setNumber(4);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)|| Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_5) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_5)) {
                 setNumber(5);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_6) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_6)) {
                 setNumber(6);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_7)|| Gdx.input.isKeyPressed(Input.Keys.NUMPAD_7)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_7) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_7)) {
                 setNumber(7);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_8)|| Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_8) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_8)) {
                 setNumber(8);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_9)|| Gdx.input.isKeyPressed(Input.Keys.NUMPAD_9)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_9) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_9)) {
                 setNumber(9);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -116,13 +167,32 @@ public class GameScreen extends ScreenAdapter {
                 selectedCell = null;
             }
         }
+
+        if (TimeUtils.millis() - lastScoreTime > SCORE_DEDUCT_TIME && !board.valid && score > 0 ){
+            lastScoreTime = TimeUtils.millis();
+            score -= 1;
+            scoreLabel.setText("score: "+ score);
+        }
+
+
         // update
-        gameplayStage.act(delta);
+        if (!board.valid) {
+            gameplayStage.act(delta);
+        } else {
+            finishStage.act(delta);
+        }
         hudStage.act(delta);
 
         // draw
-        gameplayStage.draw();
+        if (!board.valid) {
+            gameplayStage.draw();
+        } else {
+            endScore.setText("your score: " + this.score);
+            finishStage.draw();
+        }
         hudStage.draw();
+
+        //log.debug(scoreLabel.getText().toString());
     }
 
     @Override
@@ -139,30 +209,50 @@ public class GameScreen extends ScreenAdapter {
     private Actor createGrid(int size, final float cellSize) {
         final Table table = new Table();
         table.setDebug(false);   // turn on all debug lines (table, cell, and widget)
-
+        table.defaults().pad(5, 9, 0, 10);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        table.setBackground(new TextureRegionDrawable(backgroundRegion));
         final Table grid = new Table();
         grid.defaults().size(cellSize);   // all cells will be the same size
         grid.setDebug(false);
 
         final TextureRegion region0 = gameplayAtlas.findRegion(RegionNames.EMPTY);
+        /*int[][] data = Data.simple;
+        Cell[][] cells = new Cell[size][size];*/
+        //board.board = Data.solved;
 
+        TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
+        grid.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
 
         for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
                 final Cell cell = new Cell(region0);
                 cell.column = column;
                 cell.row = row;
-                cell.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        final Cell clickedCell = (Cell) event.getTarget(); // it will be an image for sure :-)
-                        if(selectedCell !=null){
-                            setNumber(selectedCell.number);
+
+                cell.preset = (board.board[row][column] != 0);
+
+                setNumberCell(board.board[row][column], cell);
+
+                if (cell.number == 0) {
+                    cell.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            final Cell clickedCell = (Cell) event.getTarget(); // it will be an image for sure :-)
+                            clickedCell.selected = true;
+                            if (selectedCell != null) {
+                                selectedCell.selected = false;
+                                setNumber(selectedCell.number);
+                            }
+                            selectedCell = clickedCell;
+                            if (selectedCell.number == 0) {
+                                selectedCell.setDrawable(gameplayAtlas.findRegion(RegionNames.SELECTED));
+                            } else {
+                                setNumberCell(selectedCell.number, selectedCell);
+                            }
                         }
-                        selectedCell = clickedCell;
-                        selectedCell.setDrawable(gameplayAtlas.findRegion(RegionNames.SELECTED));
-                        log.debug("clicked " + selectedCell.row + " " + selectedCell.column);
-                    }
-                });
+                    });
+                }
+                board.cellsBoard[row][column] = cell;
                 grid.add(cell);
             }
             grid.row();
@@ -176,102 +266,150 @@ public class GameScreen extends ScreenAdapter {
         return table;
     }
 
-    private void setNumber(int num) {
+    private Actor setFinishScreen() {
 
+
+        final Table table = new Table();
+        table.setDebug(false);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        table.setBackground(new TextureRegionDrawable(backgroundRegion));
+        table.defaults().pad(100, 200, 0, 200);// turn on all debug lines (table, cell, and widget)
+        //table.defaults().pad(17);
+        final Table menu = new Table();
+        menu.setDebug(false);
+        menu.defaults().pad(30, 50, 0, 50);
+        TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
+        menu.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
+
+        Label finish = new Label("Congratulations you have completed the game ", skin);
+        finish.setAlignment(Align.center);
+        menu.add(finish).padBottom(5).expandX().fill().row();
+
+        endScore = new Label("your score: " + this.score, skin);
+        endScore.setAlignment(Align.center);
+        menu.add(endScore).padBottom(5).expandX().fill().row();
+
+
+        /*TextField.TextFieldStyle textFieldStyle = skin.get(TextField.TextFieldStyle.class);
+        textFieldStyle.font.getData().scale(0.01f);*/
+        /*TextField.TextFieldStyle textstyle = new TextField.TextFieldStyle();
+        textstyle.font = font;*/
+
+        final TextField textfield = new TextField("", skin);
+
+        textfield.setMessageText("Username: click to add");
+        textfield.setAlignment(Align.center);
+
+        menu.add(textfield).padBottom(15).expandX().fill().row();
+
+
+        final TextButton saveScore = new TextButton("Save your score", skin);
+        saveScore.setWidth(100);
+        saveScore.setColor(Color.RED);
+        saveScore.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String test = textfield.getText();
+                if (test == null || test == "") {
+                    textfield.setMessageText("Cant save score without username");
+                } else {
+                    log.debug(test);
+                    leaderBoard.addScore(test, score);
+                    //game.setScreen(new MenuScreen(game));
+                }
+            }
+        });
+
+        menu.add(saveScore).padBottom(15).expandX().fill().row();
+        menu.top();
+        table.add(menu);
+        table.center();
+        table.setFillParent(true);
+        table.pack();
+
+        return table;
+
+    }
+
+
+    private void setNumber(int num) {
+        selectedCell.selected = false;
+        board.board[selectedCell.row][selectedCell.column] = num;
         switch (num) {
             case 1:
-                selectedCell.setNumber(1, gameplayAtlas.findRegion(RegionNames.NUMBER1B));
+                selectedCell.setNumber(1, gameplayAtlas.findRegion(RegionNames.NUMBER1W));
                 break;
             case 2:
-                selectedCell.setNumber(2, gameplayAtlas.findRegion(RegionNames.NUMBER2B));
+                selectedCell.setNumber(2, gameplayAtlas.findRegion(RegionNames.NUMBER2W));
                 break;
             case 3:
-                selectedCell.setNumber(3, gameplayAtlas.findRegion(RegionNames.NUMBER3B));
+                selectedCell.setNumber(3, gameplayAtlas.findRegion(RegionNames.NUMBER3W));
                 break;
             case 4:
-                selectedCell.setNumber(4, gameplayAtlas.findRegion(RegionNames.NUMBER4B));
+                selectedCell.setNumber(4, gameplayAtlas.findRegion(RegionNames.NUMBER4W));
                 break;
             case 5:
-                selectedCell.setNumber(5, gameplayAtlas.findRegion(RegionNames.NUMBER5B));
+                selectedCell.setNumber(5, gameplayAtlas.findRegion(RegionNames.NUMBER5W));
                 break;
             case 6:
-                selectedCell.setNumber(6, gameplayAtlas.findRegion(RegionNames.NUMBER6B));
+                selectedCell.setNumber(6, gameplayAtlas.findRegion(RegionNames.NUMBER6W));
                 break;
             case 7:
-                selectedCell.setNumber(7, gameplayAtlas.findRegion(RegionNames.NUMBER7B));
+                selectedCell.setNumber(7, gameplayAtlas.findRegion(RegionNames.NUMBER7W));
                 break;
             case 8:
-                selectedCell.setNumber(8, gameplayAtlas.findRegion(RegionNames.NUMBER8B));
+                selectedCell.setNumber(8, gameplayAtlas.findRegion(RegionNames.NUMBER8W));
                 break;
             case 9:
-                selectedCell.setNumber(9, gameplayAtlas.findRegion(RegionNames.NUMBER9B));
+                selectedCell.setNumber(9, gameplayAtlas.findRegion(RegionNames.NUMBER9W));
                 break;
             default:
                 selectedCell.setNumber(0, gameplayAtlas.findRegion(RegionNames.EMPTY));
         }
         selectedCell = null;
+        board.check();
 
     }
 
-    /*private Actor createGrid(int rows, int columns, final float cellSize) {
-        final Table table = new Table();
-        table.setDebug(false);   // turn on all debug lines (table, cell, and widget)
+    private void setNumberCell(int num, Cell cell) {
 
-        final Table grid = new Table();
-        grid.defaults().size(cellSize);   // all cells will be the same size
-        grid.setDebug(false);
-
-        final TextureRegion emptyRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
-        final TextureRegion xRegion = gameplayAtlas.findRegion(RegionNames.NUMBER0);
-        final TextureRegion oRegion = gameplayAtlas.findRegion(RegionNames.NUMBER1);
-
-        if (move == CellState.X) {
-            infoImage = new Image(xRegion);
-        } else if (move == CellState.O) {
-            infoImage = new Image(oRegion);
+        switch (num) {
+            case 1:
+                cell.setNumber(1, gameplayAtlas.findRegion(RegionNames.NUMBER1W));
+                break;
+            case 2:
+                cell.setNumber(2, gameplayAtlas.findRegion(RegionNames.NUMBER2W));
+                break;
+            case 3:
+                cell.setNumber(3, gameplayAtlas.findRegion(RegionNames.NUMBER3W));
+                break;
+            case 4:
+                cell.setNumber(4, gameplayAtlas.findRegion(RegionNames.NUMBER4W));
+                break;
+            case 5:
+                cell.setNumber(5, gameplayAtlas.findRegion(RegionNames.NUMBER5W));
+                break;
+            case 6:
+                cell.setNumber(6, gameplayAtlas.findRegion(RegionNames.NUMBER6W));
+                break;
+            case 7:
+                cell.setNumber(7, gameplayAtlas.findRegion(RegionNames.NUMBER7W));
+                break;
+            case 8:
+                cell.setNumber(8, gameplayAtlas.findRegion(RegionNames.NUMBER8W));
+                break;
+            case 9:
+                cell.setNumber(9, gameplayAtlas.findRegion(RegionNames.NUMBER9W));
+                break;
+            default:
+                cell.setNumber(0, gameplayAtlas.findRegion(RegionNames.EMPTY));
         }
 
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                final CellActor cell = new CellActor(emptyRegion);
-                cell.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        final CellActor clickedCell = (CellActor) event.getTarget(); // it will be an image for sure :-)
-                        if (clickedCell.isEmpty()) {
-                            switch (move) {
-                                case X:
-                                    clickedCell.setState(move);
-                                    clickedCell.setDrawable(xRegion);
-                                    infoImage.setDrawable(new TextureRegionDrawable(oRegion));
-                                    move = CellState.O;
-                                    break;
-                                case O:
-                                    clickedCell.setState(move);
-                                    clickedCell.setDrawable(oRegion);
-                                    infoImage.setDrawable(new TextureRegionDrawable(xRegion));
-                                    move = CellState.X;
-                                    break;
-                            }
-                        }
-                        log.debug("clicked");
-                    }
-                });
-                grid.add(cell);
-            }
-            grid.row();
-        }
+    }
 
-        table.add(grid).row();
-        table.center();
-        table.setFillParent(true);
-        table.pack();
-
-        return table;
-    }*/
 
     private Actor createBackButton() {
-        final TextButton backButton = new TextButton("Back", skin);
+        final TextButton backButton = new TextButton("Back to Menu", skin);
         backButton.setWidth(100);
         backButton.setPosition(GameConfig.HUD_WIDTH / 2f - backButton.getWidth() / 2f, 20f);
         backButton.addListener(new ClickListener() {
@@ -283,15 +421,31 @@ public class GameScreen extends ScreenAdapter {
         return backButton;
     }
 
-    private Actor createInfo() {
+
+    private Actor createScore() {
         final Table table = new Table();
-        table.add(new Label("Turn: ", skin));
-        table.add(infoImage).size(30).row();
+        table.setDebug(true);
+
+
+        final Table board = new Table();
+        TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
+        board.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
+
+        log.debug(scoreLabel.getText().toString());
+        board.add(scoreLabel).padBottom(5).expandX().fill().row();
+
+
+
+        board.center();
+        //table.defaults().pad(0,0, GameConfig.HUD_HEIGHT-200f, GameConfig.HUD_WIDTH -200f );
+        table.defaults().width(150).height(50);
+        table.add(board);
+
         table.center();
         table.pack();
         table.setPosition(
-                GameConfig.HUD_WIDTH / 2f - table.getWidth() / 2f,
-                GameConfig.HUD_HEIGHT - table.getHeight() - 20f
+                0 ,
+                GameConfig.HUD_HEIGHT - table.getHeight()
         );
         return table;
     }

@@ -22,7 +22,7 @@ import com.mygdx.game.config.GameConfig;
 
 public class IntroScreen extends ScreenAdapter {
 
-    public static final float INTRO_DURATION_IN_SEC = 3f;   // duration of the (intro) animation
+    public static final float INTRO_DURATION_IN_SEC = 1f;   // duration of the (intro) animation
 
     private final Sudoku game;
     private final AssetManager assetManager;

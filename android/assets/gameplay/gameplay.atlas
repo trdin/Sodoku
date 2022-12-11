@@ -13,160 +13,230 @@ menubg
   index: -1
 
 gameplay2.png
-size: 1024, 512
+size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 background
   rotate: false
-  xy: 2, 84
+  xy: 2, 2
   size: 600, 400
   orig: 600, 400
   offset: 0, 0
   index: -1
 border
   rotate: false
-  xy: 2, 2
+  xy: 604, 924
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
+grid
+  rotate: false
+  xy: 2, 404
+  size: 600, 600
+  orig: 600, 600
+  offset: 0, 0
+  index: -1
 number0
   rotate: false
-  xy: 604, 404
+  xy: 604, 842
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number1
   rotate: false
-  xy: 84, 2
+  xy: 686, 924
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number1border
   rotate: false
-  xy: 686, 240
+  xy: 686, 678
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number1w
+  rotate: false
+  xy: 768, 760
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number2
   rotate: false
-  xy: 604, 322
+  xy: 604, 760
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number2border
   rotate: false
-  xy: 768, 322
+  xy: 850, 842
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number2w
+  rotate: false
+  xy: 932, 924
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number3
   rotate: false
-  xy: 686, 404
+  xy: 686, 842
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number3border
   rotate: false
-  xy: 850, 404
+  xy: 604, 514
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number3w
+  rotate: false
+  xy: 686, 596
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number4
   rotate: false
-  xy: 166, 2
+  xy: 768, 924
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number4border
   rotate: false
-  xy: 330, 2
+  xy: 768, 678
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number4w
+  rotate: false
+  xy: 850, 760
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number5
   rotate: false
-  xy: 604, 240
+  xy: 604, 678
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number5border
   rotate: false
-  xy: 686, 158
+  xy: 932, 842
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number5w
+  rotate: false
+  xy: 604, 432
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number6
   rotate: false
-  xy: 686, 322
+  xy: 686, 760
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number6border
   rotate: false
-  xy: 768, 240
+  xy: 686, 514
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number6w
+  rotate: false
+  xy: 768, 596
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number7
   rotate: false
-  xy: 768, 404
+  xy: 768, 842
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number7border
   rotate: false
-  xy: 850, 322
+  xy: 850, 678
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number7w
+  rotate: false
+  xy: 932, 760
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number8
   rotate: false
-  xy: 248, 2
+  xy: 850, 924
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number8border
   rotate: false
-  xy: 932, 404
+  xy: 604, 350
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number8w
+  rotate: false
+  xy: 686, 432
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number9
   rotate: false
-  xy: 604, 158
+  xy: 604, 596
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 number9border
   rotate: false
-  xy: 412, 2
+  xy: 768, 514
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+number9w
+  rotate: false
+  xy: 850, 596
   size: 80, 80
   orig: 80, 80
   offset: 0, 0
   index: -1
 selected
   rotate: false
-  xy: 768, 158
+  xy: 932, 678
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

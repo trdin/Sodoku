@@ -7,15 +7,26 @@ public class Board {
 
     static int N = 9;
 
-    int [][]Board;
+    public int [][]board;
+
+    public Cell [][] cellsBoard;
+
+    public Boolean valid = false;
+
+    public Board(int [][] data, Cell[][]cellsBoard){
+        this.cellsBoard = cellsBoard;
+        board = data;
+    }
 
 
-
+    public void check(){
+        valid =  isValidSudoku();
+    }
 
     // Function to check if all elements
 // of the board[][] array store
 // value in the range[1, 9]
-    static boolean isinRange(int[][] board) {
+    public boolean isinRange() {
 
         // Traverse board[][] array
         for (int i = 0; i < N; i++) {
@@ -31,14 +42,12 @@ public class Board {
         }
         return true;
     }
-
-    // Function to check if the solution
-// of sudoku puzzle is valid or not
-    static boolean isValidSudoku(int board[][]) {
+    // Function to check if the solution of sudoku puzzle is valid or not
+    public boolean isValidSudoku() {
 
         // Check if all elements of board[][]
         // stores value in the range[1, 9]
-        if (isinRange(board) == false) {
+        if (!isinRange()) {
             return false;
         }
 
