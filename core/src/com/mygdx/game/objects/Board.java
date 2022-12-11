@@ -19,6 +19,8 @@ public class Board {
     }
 
 
+
+
     public void check(){
         valid =  isValidSudoku();
     }

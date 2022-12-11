@@ -29,13 +29,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
+import com.mygdx.game.common.GameManager;
 import com.mygdx.game.config.GameConfig;
 import com.mygdx.game.objects.Board;
 import com.mygdx.game.objects.Cell;
 import com.mygdx.game.objects.Data;
+import com.mygdx.game.objects.GameMusicSounds;
 import com.mygdx.game.objects.leaderBoard;
-
-import java.util.Objects;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -74,18 +74,28 @@ public class GameScreen extends ScreenAdapter {
     private Image infoImage;
 
     public GameScreen(Sudoku game) {
-        score = 100;
-
-        lastScoreTime = TimeUtils.millis();
-        int[][] data = new int[9][9];
-
-        for (int i = 0; i < Data.solved.length; i++) {
-            data[i] = Data.solved[i].clone();
+        score = 1000;
+        //log.debug(GameManager.INSTANCE.getDiff());
+        switch(GameManager.INSTANCE.getDiff()) {
+            case 0:
+                score = 50;
+                break;
+            case 1:
+                score = 500;
+                break;
+            case 2:
+                score = 1500;
+                break;
+            case 3:
+                score = 2000;
+                break;
+            default:
+                score = 2000;
         }
-
+        lastScoreTime = TimeUtils.millis();
         this.game = game;
         assetManager = game.getAssetManager();
-        board = new Board(data, new Cell[size][size]);
+        board = new Board(Data.getBoard(), new Cell[size][size]);
         //log.debug("create");
 
         //board.board = Data.solved.clone();
@@ -121,6 +131,12 @@ public class GameScreen extends ScreenAdapter {
         finishStage.addActor(setFinishScreen());
 
         Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage, finishStage));
+
+        if(!GameMusicSounds.gameMusic.isPlaying()){
+            GameMusicSounds.gameMusic.play();
+            GameMusicSounds.gameMusic.setLooping(true);
+            GameMusicSounds.gameMusic.setVolume(0.5f);
+        }
     }
 
     @Override
@@ -237,6 +253,7 @@ public class GameScreen extends ScreenAdapter {
                 if (cell.number == 0) {
                     cell.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
+                            GameMusicSounds.soundClick.play(10f);
                             final Cell clickedCell = (Cell) event.getTarget(); // it will be an image for sure :-)
                             clickedCell.selected = true;
                             if (selectedCell != null) {
@@ -310,12 +327,14 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String test = textfield.getText();
-                if (test == null || test == "") {
+                GameMusicSounds.soundMenu.play(1.0f);
+                if (test == null || test.equals("") || test.equals(" ")) {
                     textfield.setMessageText("Cant save score without username");
                 } else {
                     log.debug(test);
                     leaderBoard.addScore(test, score);
-                    //game.setScreen(new MenuScreen(game));
+                    GameMusicSounds.gameMusic.stop();
+                    game.setScreen(new MenuScreen(game));
                 }
             }
         });
@@ -333,6 +352,7 @@ public class GameScreen extends ScreenAdapter {
 
 
     private void setNumber(int num) {
+        GameMusicSounds.soundFinish.play(0.5f);
         selectedCell.selected = false;
         board.board[selectedCell.row][selectedCell.column] = num;
         switch (num) {
@@ -415,6 +435,8 @@ public class GameScreen extends ScreenAdapter {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.gameMusic.stop();
+                GameMusicSounds.soundMenu.play(1.0f);
                 game.setScreen(new MenuScreen(game));
             }
         });

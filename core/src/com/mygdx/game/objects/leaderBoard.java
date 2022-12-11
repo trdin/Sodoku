@@ -18,21 +18,6 @@ import java.util.Map;
 import java.util.Vector;
 
 
-
-class ComparatorDesc implements Comparator<Pair<String,Integer>> {
-    public int compare(Pair<String,Integer> emp1, Pair<String,Integer> emp2) {
-        return emp2.snd - emp1.snd;
-    }
-}
-
-
-class Scores {
-     public Vector<String> names = new Vector<String>();
-     public Vector<Integer> scores = new Vector<Integer>();
-
-
-}
-
 public class leaderBoard {
 
     private static final Logger log = new Logger(GameScreen.class.getSimpleName(), Logger.DEBUG);
@@ -45,6 +30,12 @@ public class leaderBoard {
 
     // private lateinit var gson: Gson
 
+  /*  public static getScore(){
+        intializeObj();
+        return scoreObj;
+
+    }
+*/
     public static void addScore(String user, int score) {
         intializeObj();
 

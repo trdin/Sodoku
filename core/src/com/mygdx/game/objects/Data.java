@@ -1,6 +1,45 @@
 package com.mygdx.game.objects;
 
+import com.mygdx.game.common.GameManager;
+
+import java.util.Random;
+
 public class Data {
+
+    public static int [][] getBoard(){
+        int[][] data = new int[9][9];
+        int[][] board = getTable();
+        for (int i = 0; i < board.length; i++) {
+            data[i] = board[i].clone();
+        }
+        return data;
+    }
+
+    private static int [][] getTable(){
+        int diff = GameManager.INSTANCE.getDiff();
+
+        if(diff == 0){
+            return solved;
+        }else if(diff == 1){
+            return simple;
+        }else if(diff == 2 ){
+            return medium;
+        }else{
+            Random random = new Random();
+            int rand = random.nextInt(4)+ 1; ;
+            if(rand == 1){
+                return hard1;
+            }else if (rand == 2){
+                return hard2;
+            } else if(rand == 3){
+                return hard3;
+            } else {
+                return hard4;
+            }
+        }
+    }
+
+
 
 
     public final static int[][] solved = {

@@ -11,24 +11,47 @@ public class GameManager {
 
     public static final GameManager INSTANCE = new GameManager();
 
-    private static final String INIT_MOVE_KEY = "initMove";
+    private static final String DIFF_KEY = "diff";
+    private static final String COLOR_KEY = "color";
+
+
+    private static int diff;
+
+    private static int colors;
 
     private final Preferences PREFS;
 
     private GameManager() {
         PREFS = Gdx.app.getPreferences(Sudoku.class.getSimpleName());
-        //String moveName = PREFS.getString(INIT_MOVE_KEY, CellState.X.name());
-        //initMove = CellState.valueOf(moveName);
+        String diffStr = PREFS.getString(DIFF_KEY, "0");
+        diff = Integer.parseInt(diffStr);
+        String colorStr = PREFS.getString(COLOR_KEY, "1");
+        colors = Integer.parseInt(colorStr);
     }
 
-   /* public CellState getInitMove() {
-        return initMove;
+    public int getDiff() {
+        return diff;
     }
 
-    public void setInitMove(CellState move) {
-        initMove = move;
+    public int getColors() {
+        return colors;
+    }
 
-        PREFS.putString(INIT_MOVE_KEY, move.name());
+    public void setDiff(int setDiff) {
+        diff = setDiff;
+
+        PREFS.putString(DIFF_KEY, Integer.toString(diff));
         PREFS.flush();
-    }*/
+    }
+
+    public void setColors(boolean setColor) {
+        if(setColor){
+            colors = 1;
+        }else{
+            colors = 0;
+        }
+
+        PREFS.putString(COLOR_KEY, Integer.toString(colors));
+        PREFS.flush();
+    }
 }

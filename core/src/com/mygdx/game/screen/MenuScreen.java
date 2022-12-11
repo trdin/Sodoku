@@ -3,6 +3,7 @@ package com.mygdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +21,7 @@ import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
 import com.mygdx.game.config.GameConfig;
+import com.mygdx.game.objects.GameMusicSounds;
 
 
 public class MenuScreen extends ScreenAdapter {
@@ -32,6 +34,8 @@ public class MenuScreen extends ScreenAdapter {
 
     private Skin skin;
     private TextureAtlas gameplayAtlas;
+
+    Music music;
 
     public MenuScreen(Sudoku game) {
         this.game = game;
@@ -48,6 +52,12 @@ public class MenuScreen extends ScreenAdapter {
 
         stage.addActor(createUi());
         Gdx.input.setInputProcessor(stage);
+
+        if(!GameMusicSounds.musicMenu.isPlaying()){
+            GameMusicSounds.musicMenu.play();
+            GameMusicSounds.musicMenu.setLooping(true);
+        }
+
     }
 
     @Override
@@ -92,6 +102,8 @@ public class MenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.musicMenu.stop();
+                GameMusicSounds.soundMenu.play(1.0f);
                 game.setScreen(new GameScreen(game));
             }
         });
@@ -100,6 +112,7 @@ public class MenuScreen extends ScreenAdapter {
         leaderboardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.soundMenu.play(1.0f);
                 game.setScreen(new LeaderboardScreen(game));
             }
         });
@@ -108,6 +121,7 @@ public class MenuScreen extends ScreenAdapter {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.soundMenu.play(1.0f);
                 game.setScreen(new SettingsScreen(game));
             }
         });
@@ -116,6 +130,7 @@ public class MenuScreen extends ScreenAdapter {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.soundMenu.play(1.0f);
                 Gdx.app.exit();
             }
         });

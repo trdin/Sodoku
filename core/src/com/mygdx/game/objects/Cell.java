@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygdx.game.common.GameManager;
 
 public class Cell extends Image {
     public static final float CELL_DIM = 5;
@@ -30,7 +31,7 @@ public class Cell extends Image {
     public void setNumber(int num, TextureRegion region) {
         number = num;
         TintableRegionDrawable tint = new TintableRegionDrawable(region);
-        if(preset){
+        if(preset && GameManager.INSTANCE.getColors() == 1){
             tint.setTint(Color.FOREST);
         }else if(selected){
             tint.setTint(Color.RED);
@@ -38,8 +39,6 @@ public class Cell extends Image {
             tint.setTint(Color.BLACK);
         }
         super.setDrawable(tint);
-
-
     }
 
 }

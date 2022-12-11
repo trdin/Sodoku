@@ -38,6 +38,9 @@ public class RegionNames {
     public static final String MENU_BACKGROUND = "menubg";
     public static final String BACKGROUND = "background";
     public static final String INTRO_BACKGROUND = "background";
+    public static final String CHECKED = "checked";
+    public static final String UNCHECKED = "unchecked";
+
 
     private RegionNames() {
     }

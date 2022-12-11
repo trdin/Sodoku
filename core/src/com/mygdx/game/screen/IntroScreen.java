@@ -18,6 +18,7 @@ import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
 import com.mygdx.game.config.GameConfig;
+import com.mygdx.game.objects.GameMusicSounds;
 
 
 public class IntroScreen extends ScreenAdapter {
@@ -65,6 +66,12 @@ public class IntroScreen extends ScreenAdapter {
        // stage.addActor(createKeyhole());
         for (int i = 0; i <= 8; i++) {
             stage.addActor(createAnimation(i));
+        }
+
+        if(!GameMusicSounds.musicMenu.isPlaying()){
+            GameMusicSounds.musicMenu.play();
+            GameMusicSounds.musicMenu.setLooping(true);
+            GameMusicSounds.musicMenu.setVolume(0.2f);
         }
     }
 

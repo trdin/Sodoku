@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -23,6 +24,9 @@ import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
 import com.mygdx.game.config.GameConfig;
+import com.mygdx.game.objects.GameMusicSounds;
+import com.mygdx.game.objects.Scores;
+import com.mygdx.game.objects.leaderBoard;
 
 public class LeaderboardScreen extends ScreenAdapter {
 
@@ -95,6 +99,7 @@ public class LeaderboardScreen extends ScreenAdapter {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameMusicSounds.soundMenu.play(1.0f);
                 game.setScreen(new MenuScreen(game));
             }
         });
@@ -104,16 +109,22 @@ public class LeaderboardScreen extends ScreenAdapter {
         TextureRegion menuBackground = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
         contentTable.setBackground(new TextureRegionDrawable(menuBackground));
 
-        contentTable.add(new Label("Leader Board", uiSkin)).padBottom(10).colspan(2).row();
-        contentTable.add(new Label("Name", uiSkin)).padBottom(10).colspan(1);
-        contentTable.add(new Label("Score", uiSkin)).padBottom(10).colspan(1).row();
+        Label title = new Label("Leader Board", uiSkin);
+        title.setAlignment(Align.center);
+        contentTable.add(title).padBottom(10).fillX().colspan(10).row();
+        contentTable.add(new Label("Place", uiSkin)).padBottom(10).colspan(2);
+        contentTable.add(new Label("Name", uiSkin)).padBottom(10).colspan(4);
+        contentTable.add(new Label("Score", uiSkin)).padBottom(10).colspan(4).row();
 
-        for (int i = 1; i < 6; i++) {
-            contentTable.add(new Label(String.format("Peter%d", i), uiSkin)).padBottom(10).colspan(1);
-            contentTable.add(new Label(String.format("%d", (100-i)), uiSkin)).padBottom(10).colspan(1).row();
+        leaderBoard.intializeObj();
+
+        for (int i = 0; i < leaderBoard.scoreObj.scores.size(); i++) {
+            contentTable.add(new Label((i+1) +".", uiSkin)).padBottom(10).colspan(2);
+            contentTable.add(new Label(leaderBoard.scoreObj.names.get(i), uiSkin)).padBottom(10).colspan(4);
+            contentTable.add(new Label(leaderBoard.scoreObj.scores.get(i).toString(), uiSkin)).padBottom(10).colspan(4).row();
         }
 
-        contentTable.add(backButton).width(100).padTop(50).colspan(2);
+        contentTable.add(backButton).width(300).padTop(50).colspan(10).center().row();
 
         table.add(contentTable);
         table.center();
