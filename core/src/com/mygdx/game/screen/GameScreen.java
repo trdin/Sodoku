@@ -132,11 +132,7 @@ public class GameScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage, finishStage));
 
-        if(!GameMusicSounds.gameMusic.isPlaying()){
-            GameMusicSounds.gameMusic.play();
-            GameMusicSounds.gameMusic.setLooping(true);
-            GameMusicSounds.gameMusic.setVolume(0.5f);
-        }
+        GameMusicSounds.INSTANCE.playMusicGame();
     }
 
     @Override
@@ -253,7 +249,7 @@ public class GameScreen extends ScreenAdapter {
                 if (cell.number == 0) {
                     cell.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
-                            GameMusicSounds.soundClick.play(10f);
+                            GameMusicSounds.INSTANCE.playSoundClick();
                             final Cell clickedCell = (Cell) event.getTarget(); // it will be an image for sure :-)
                             clickedCell.selected = true;
                             if (selectedCell != null) {
@@ -327,7 +323,7 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String test = textfield.getText();
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 if (test == null || test.equals("") || test.equals(" ")) {
                     textfield.setMessageText("Cant save score without username");
                 } else {
@@ -352,7 +348,7 @@ public class GameScreen extends ScreenAdapter {
 
 
     private void setNumber(int num) {
-        GameMusicSounds.soundFinish.play(0.5f);
+        GameMusicSounds.INSTANCE.playSoundFinish();
         selectedCell.selected = false;
         board.board[selectedCell.row][selectedCell.column] = num;
         switch (num) {
@@ -436,7 +432,7 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameMusicSounds.gameMusic.stop();
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new MenuScreen(game));
             }
         });

@@ -53,10 +53,7 @@ public class MenuScreen extends ScreenAdapter {
         stage.addActor(createUi());
         Gdx.input.setInputProcessor(stage);
 
-        if(!GameMusicSounds.musicMenu.isPlaying()){
-            GameMusicSounds.musicMenu.play();
-            GameMusicSounds.musicMenu.setLooping(true);
-        }
+        GameMusicSounds.INSTANCE.playMusicMenu();
 
     }
 
@@ -103,7 +100,7 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameMusicSounds.musicMenu.stop();
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new GameScreen(game));
             }
         });
@@ -112,7 +109,7 @@ public class MenuScreen extends ScreenAdapter {
         leaderboardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new LeaderboardScreen(game));
             }
         });
@@ -121,7 +118,7 @@ public class MenuScreen extends ScreenAdapter {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new SettingsScreen(game));
             }
         });
@@ -130,7 +127,7 @@ public class MenuScreen extends ScreenAdapter {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 Gdx.app.exit();
             }
         });

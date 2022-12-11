@@ -92,7 +92,7 @@ public class SettingsScreen extends ScreenAdapter {
 
     private Actor createUi() {
         Table table = new Table();
-        table.defaults().pad(200);
+        table.defaults().pad(100, 200, 100, 200);
 
         TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
@@ -101,6 +101,8 @@ public class SettingsScreen extends ScreenAdapter {
         buttonTable.defaults().padLeft(30).padRight(30);
         TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
         buttonTable.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
+
+        buttonTable.add(new Label("Settings", skin)).padBottom(30).colspan(10).row();
 
 
         buttonTable.add(new Label("Difficulty", skin)).padBottom(20).colspan(5);
@@ -117,15 +119,34 @@ public class SettingsScreen extends ScreenAdapter {
         int colorVar = GameManager.INSTANCE.getColors();
 
         colors.setChecked(colorVar == 1);
-        buttonTable.add(colors).padBottom(10).colspan(10).row();
+        buttonTable.add(colors).padBottom(10).colspan(5);
+
+        final CheckBox music = new CheckBox(" Music", skin);
+        int musicVar = GameManager.INSTANCE.getMusic();
+
+        music.setChecked(musicVar == 1);
+        buttonTable.add(music).padBottom(10).colspan(5).row();
+
+        final CheckBox sound= new CheckBox(" Sound", skin);
+        int soundVar = GameManager.INSTANCE.getSound();
+
+        sound.setChecked(soundVar == 1);
+        buttonTable.add(sound).padBottom(10).colspan(10).row();
 
         TextButton saveScore = new TextButton("Save Settings", skin);
         saveScore.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 log.debug("save");
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 GameManager.INSTANCE.setColors(colors.isChecked());
+                GameManager.INSTANCE.setMusic(music.isChecked());
+                if(!music.isChecked()){
+                    GameMusicSounds.musicMenu.stop();
+                }else{
+                    GameMusicSounds.INSTANCE.playMusicMenu();
+                }
+                GameManager.INSTANCE.setSound(sound.isChecked());
                 String text = textfield.getText();
                 int diff = 0;
                 if(isNumeric(text)){
@@ -149,12 +170,12 @@ public class SettingsScreen extends ScreenAdapter {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new MenuScreen(game));
             }
         });
 
-        buttonTable.add(backButton).padTop(15).colspan(10).row();
+        buttonTable.add(backButton).padTop(30).colspan(10).row();
 
 
 

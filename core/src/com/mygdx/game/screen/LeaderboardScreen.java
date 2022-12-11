@@ -99,7 +99,7 @@ public class LeaderboardScreen extends ScreenAdapter {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMusicSounds.soundMenu.play(1.0f);
+                GameMusicSounds.INSTANCE.playSoundMenu();
                 game.setScreen(new MenuScreen(game));
             }
         });

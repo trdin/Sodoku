@@ -68,11 +68,7 @@ public class IntroScreen extends ScreenAdapter {
             stage.addActor(createAnimation(i));
         }
 
-        if(!GameMusicSounds.musicMenu.isPlaying()){
-            GameMusicSounds.musicMenu.play();
-            GameMusicSounds.musicMenu.setLooping(true);
-            GameMusicSounds.musicMenu.setVolume(0.2f);
-        }
+        GameMusicSounds.INSTANCE.playMusicMenu();
     }
 
     @Override
