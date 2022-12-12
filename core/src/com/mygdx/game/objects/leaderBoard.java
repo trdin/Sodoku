@@ -21,7 +21,7 @@ import java.util.Vector;
 public class leaderBoard {
 
     private static final Logger log = new Logger(GameScreen.class.getSimpleName(), Logger.DEBUG);
-    public static Map<String, Integer> score = new HashMap<String, Integer>();
+
     final static String filename = "./data/score.json";
 
     public static Scores scoreObj = new Scores();

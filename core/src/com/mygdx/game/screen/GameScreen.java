@@ -35,7 +35,6 @@ import com.mygdx.game.objects.Board;
 import com.mygdx.game.objects.Cell;
 import com.mygdx.game.objects.Data;
 import com.mygdx.game.objects.GameMusicSounds;
-import com.mygdx.game.objects.leaderBoard;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -328,7 +327,7 @@ public class GameScreen extends ScreenAdapter {
                     textfield.setMessageText("Cant save score without username");
                 } else {
                     log.debug(test);
-                    leaderBoard.addScore(test, score);
+                    GameManager.INSTANCE.addScore(test, score);
                     GameMusicSounds.gameMusic.stop();
                     game.setScreen(new MenuScreen(game));
                 }

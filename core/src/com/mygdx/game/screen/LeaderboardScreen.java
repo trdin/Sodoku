@@ -23,10 +23,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.assets.AssetDescriptors;
 import com.mygdx.assets.RegionNames;
 import com.mygdx.game.Sudoku;
+import com.mygdx.game.common.GameManager;
 import com.mygdx.game.config.GameConfig;
 import com.mygdx.game.objects.GameMusicSounds;
 import com.mygdx.game.objects.Scores;
-import com.mygdx.game.objects.leaderBoard;
+//import com.mygdx.game.objects.leaderBoard;
 
 public class LeaderboardScreen extends ScreenAdapter {
 
@@ -116,12 +117,12 @@ public class LeaderboardScreen extends ScreenAdapter {
         contentTable.add(new Label("Name", uiSkin)).padBottom(10).colspan(4);
         contentTable.add(new Label("Score", uiSkin)).padBottom(10).colspan(4).row();
 
-        leaderBoard.intializeObj();
+        GameManager.INSTANCE.intializeObj();
 
-        for (int i = 0; i < leaderBoard.scoreObj.scores.size(); i++) {
+        for (int i = 0; i < GameManager.scoreObj.scores.size(); i++) {
             contentTable.add(new Label((i+1) +".", uiSkin)).padBottom(10).colspan(2);
-            contentTable.add(new Label(leaderBoard.scoreObj.names.get(i), uiSkin)).padBottom(10).colspan(4);
-            contentTable.add(new Label(leaderBoard.scoreObj.scores.get(i).toString(), uiSkin)).padBottom(10).colspan(4).row();
+            contentTable.add(new Label(GameManager.scoreObj.names.get(i), uiSkin)).padBottom(10).colspan(4);
+            contentTable.add(new Label(GameManager.scoreObj.scores.get(i).toString(), uiSkin)).padBottom(10).colspan(4).row();
         }
 
         contentTable.add(backButton).width(300).padTop(50).colspan(10).center().row();
