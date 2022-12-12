@@ -3,8 +3,10 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.common.GameManager;
 
 public class Cell extends Image {
@@ -38,7 +40,24 @@ public class Cell extends Image {
         }else {
             tint.setTint(Color.BLACK);
         }
+        if(!preset && !selected && number !=0){
+            addAnimation();
+        }
         super.setDrawable(tint);
+    }
+
+    private void addAnimation() {
+        setOrigin(Align.center);
+        addAction(
+                Actions.sequence(
+                        Actions.scaleTo(0.2f, 0.2f, 0.15f),
+                        /*Actions.parallel(
+                                Actions.rotateBy(720, 0.25f),
+
+                        ),*/
+                        Actions.scaleTo(1, 1, 0.15f)
+                )
+        );
     }
 
 }

@@ -442,7 +442,7 @@ public class GameScreen extends ScreenAdapter {
 
     private Actor createScore() {
         final Table table = new Table();
-        table.setDebug(true);
+        table.setDebug(false);
 
 
         final Table board = new Table();
